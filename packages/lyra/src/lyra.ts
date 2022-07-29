@@ -1,12 +1,13 @@
 import type { queueAsPromised } from "fastq";
-import { nanoid } from "nanoid";
 import * as fastq from "fastq";
-import { Trie } from "./prefix-tree/trie";
+import { nanoid } from "nanoid";
 import * as ERRORS from "./errors";
-import { tokenize } from "./tokenizer";
-import { formatNanoseconds, getNanosecondsTime } from "./utils";
+import { Trie } from "./prefix-tree/trie";
 import { Language, SUPPORTED_LANGUAGES } from "./stemmer";
+import { _persistIndex, _restoreIndex } from "./store";
+import { tokenize } from "./tokenizer";
 import type { ResolveSchema, SearchProperties } from "./types";
+import { formatNanoseconds, getNanosecondsTime } from "./utils";
 
 export type PropertyType = "string" | "number" | "boolean";
 
@@ -84,6 +85,21 @@ export class Lyra<TSchema extends PropertiesSchema = PropertiesSchema> {
     this.defaultLanguage = defaultLanguage;
     this.schema = properties.schema;
     this.buildIndex(properties.schema);
+  }
+
+  /**
+   * Serialize the Index and Nested Tries to disk for fast reconstruction
+   */
+  persistIndex() {
+    _persistIndex(this.index, this.docs);
+  }
+
+  /**
+   * Serialize the Index and Nested Tries to disk for fast reconstruction
+   */
+  restoreIndex() {
+    const { docMap } = _restoreIndex();
+    this.docs = docMap;
   }
 
   private buildIndex(schema: TSchema, prefix = "") {
@@ -263,6 +279,7 @@ export class Lyra<TSchema extends PropertiesSchema = PropertiesSchema> {
   }: QueueDocParams<TSchema>): Promise<void> {
     const index = this.index;
     this.docs.set(id, doc);
+    const timeStart = getNanosecondsTime();
 
     function recursiveTrieInsertion(doc: ResolveSchema<TSchema>, prefix = "") {
       for (const key of Object.keys(doc)) {
