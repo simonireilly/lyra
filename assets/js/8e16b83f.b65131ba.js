@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunklyra=self.webpackChunklyra||[]).push([[125],{1369:e=>{e.exports=JSON.parse('{"title":"Extras","slug":"/category/extras","permalink":"/lyra/docs/category/extras","navigation":{"previous":{"title":"Delete Data","permalink":"/lyra/docs/usage/deletion"},"next":{"title":"Contribute to Lyra","permalink":"/lyra/docs/extras/contributing"}}}')}}]);

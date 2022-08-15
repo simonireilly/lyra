@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunklyra=self.webpackChunklyra||[]).push([[885],{4304:t=>{t.exports=JSON.parse('{"title":"Introduction","description":"Get ready to learn Lyra.","slug":"/category/introduction","permalink":"/lyra/docs/category/introduction","navigation":{"next":{"title":"Getting Started with Lyra","permalink":"/lyra/docs/introduction/getting-started"}}}')}}]);
